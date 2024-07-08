@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        
+        header {
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        main {
+            padding: 20px;
+        }
+        
+        .orders {
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h2>Личный кабинет</h2>
+        </div>
+        
+        <div class="user-info">
+            {% block user_data %}
+            {%if user_data%}
+
+            <h2> {{ user_data['first_name'] }} {{ user_data['last_name'] }} {{ user_data['patronymic'] }}</h2>
+            {% endif %}
+            {%endblock%}
+            <a href="{{ url_for('auth.logout') }}">Выйти</a>
+            
+        </div>
+
+    </header>
+    <main>
+        <section class="orders">
+            <h2>Заказы</h2>
+            <table id="orders-table">
+                <thead> 
+                    <tr>
+                        <th>ID</th>
+                        <th>Услуга</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+            
+        </section>
+        <button id="new-order-btn" >Оформить новый заказ</button>
+        <td><a href="{{ url_for('order.make_order') }}">Оформить новый заказ</a></td>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

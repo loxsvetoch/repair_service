@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Register page</h1>
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{cat}}">{{msg}}</div> 
+{% endfor %}
+    <form method="POST">
+        <form action="/register" method="post" class="form-contact">
+            <p><label for="last_name">Фамилия:</label><input type="text" name="last_name" value="" required></p>
+            <p><label for="first_name">Имя:</label><input type="text" name="first_name" value="" required></p>
+            <p><label for="patronymic">Отчество:</label><input type="text" name="patronymic" value="" required></p>
+            <p><label for="phone">Номер телефона:</label><input type="text" name="phone" value="" required></p>
+            <p><label for="psw">Пароль:</label><input type="password" name="psw" value="" required></p>
+            <p><label for="psw_again">Повторите пароль:</label><input type="password" name="psw_again" value="" required></p>
+            <p><input type="submit" value="Зарегистрироваться"></p>
+        </form>
+        <tr>
+            <td><a href="{{ url_for('auth.login') }}">Login</a></td>
+            <td><input type="submit" value="Register"></td>
+        </tr>
+    </form>
+</body>
+</html>

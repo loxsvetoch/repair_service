@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <td><a href="{{ url_for('auth.register') }}">регистрация</a></td>
+    <td><a href="{{ url_for('auth.login') }}">авторизация</a></td>
+    <td><a href="{{ url_for('profile.profile') }}">профиль</a></td>
+
+{% endblock %}

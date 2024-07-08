@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Login page</h1>
+
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{cat}}">{{msg}}</div> 
+{% endfor %}
+
+<form method="POST">
+    <table>
+        <tr> <td>phone number</td> <td><input type="text" name="phone_number"></td></tr>
+        <tr> <td>password</td> <td><input type="text" name="password"></td></tr>
+
+        <tr>
+            <td><a href="{{ url_for('auth.register') }}">Register</a></td>
+            <td><input type="submit" value="Login"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

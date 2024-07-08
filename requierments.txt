@@ -1,0 +1,11 @@
+flask
+python-dotenv
+flask_login
+psycopg2
+flask-sqlalchemy
+SQLAlchemy
+click
+itsdangerous
+Jinja2
+MarkupSafe
+Werkzeug
