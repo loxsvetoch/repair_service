@@ -1,0 +1,99 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+
+<body>
+    <footer>
+        <div class="container">      
+            профиЛЬ АДМИНА
+        </div>
+    </footer>
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}">{{msg}}</div> 
+    {% endfor %}
+    
+    <div class="profile-container">
+        {% for cat, msg in get_flashed_messages(True) %}
+        <div class="flash {{cat}}">{{msg}}</div> 
+        {% endfor %}
+            <form action="{{ url_for('profile.admin_profile') }}" method="POST">
+                <h3>Добавить работника</h3>
+
+                <div>
+                    <input type="text" name="stype" list="manage_type" placeholder="Добавить/Изменить или удалить работника">
+                    <datalist id="manage_type">
+                        {% for type in manage_type %}
+                        <option value="{{ type }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <input type="text" name="employee_number" placeholder="Номер телефона">
+                <input type="text" name="employee_first_name" placeholder="Имя">
+                <input type="text" name="employee_last_name" placeholder="Фамилия">
+                <input type="text" name="employee_patronymic" placeholder="Отчество">
+                <input type="text" name="employee_salary" placeholder="Зарплата">
+                <input type="text" name="employee_service_id" placeholder="ID Сервиса">
+                <input type="text" name="employee_password" placeholder="пароль ">
+                
+                <input type="hidden" name="form_type" value="employee_form">
+                <button type="submit">Отправить</button>
+            </form>
+            
+        </form>
+    </div>
+
+    <div class="profile-container">
+        <form action="{{ url_for('profile.admin_profile') }}" method="POST">
+            <h3>Добавить сервис</h3>
+
+            <div>
+                <input type="text" name="stype" list="manage_type" placeholder="Добавить/Изменить или удалить сервис">
+                <datalist id="manage_type">
+                    {% for type in manage_type %}
+                    <option value="{{ type }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+            <input type="text" name="service_specialization" placeholder="Специализация">
+            <input type="text" name="service_index" placeholder="Индекс">
+            <input type="text" name="service_address" placeholder="Адрес">
+            <input type="text" name="service_number" placeholder="Номер дома">
+            
+            <input type="hidden" name="form_type" value="service_form">
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+
+    <div class="profile-container">
+        <form action="{{ url_for('profile.admin_profile') }}" method="POST">
+            <h3>Добавить услугу</h3>
+
+            <div>
+                <input type="text" name="stype" list="manage_type" placeholder="Добавить/Изменить или удалить услугу">
+                <datalist id="manage_type">
+                    {% for type in manage_type %}
+                    <option value="{{ type }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <input type="text" name="service_index_for_details" placeholder="выбрать сервис">
+            <input type="text" name="service_description" placeholder="описание услуги">
+            <input type="text" name="service_price" placeholder="Цена">
+            <input type="text" name="ws_id" placeholder="id (для удаления)">
+
+            <input type="hidden" name="form_type" value="service_details_form">
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+</body>
+
+{% endblock %}

@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<h1>Login page</h1>
+    <div class="modern-content-page">
+        <div class="register-container">
+            <h1>Регистрация</h1>
+            {% for cat, msg in get_flashed_messages(True) %}
+            <div class="flash {{cat}}">{{msg}}</div> 
+            {% endfor %}
+            <form method="post" class="register-form">
 
-{% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{msg}}</div> 
-{% endfor %}
+                <div class="form-group">
+                    <label for="phone">Номер телефона:</label>
+                    <input type="tel" id="phone" name="phone_number" required>
+                </div>
 
-<form method="POST">
-    <table>
-        <tr> <td>phone number</td> <td><input type="text" name="phone_number"></td></tr>
-        <tr> <td>password</td> <td><input type="text" name="password"></td></tr>
+                <div class="form-group">
+                    <label for="psw">Пароль:</label>
+                    <input type="password" id="psw" name="password" required>
+                </div>
 
-        <tr>
-            <td><a href="{{ url_for('auth.register') }}">Register</a></td>
-            <td><input type="submit" value="Login"></td>
-        </tr>
-    </table>
-</form>
+                <input type="submit" class="btn-primary" value="Войти">
+            </form>
+
+            <div class="form-footer">
+                <p>Еще нет аккаунта? <a href="{{ url_for('auth.register') }}" class="login-link">Войти</a></p>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>

@@ -9,3 +9,5 @@ itsdangerous
 Jinja2
 MarkupSafe
 Werkzeug
+asyncpg
+pydantic_settings

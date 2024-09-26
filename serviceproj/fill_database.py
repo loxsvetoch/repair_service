@@ -111,7 +111,7 @@ televisions = [
     'LG UN6950 4K UHD',
     'LG UN7300 1080p',
     'LG UN7000 1080p',
-    'LG LM5700 1080p',
+    'LG LM5700 1080p', 
     'LG LM5200 1080p',
     'LG LM5000 1080p',
 ]

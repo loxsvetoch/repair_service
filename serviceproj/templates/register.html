@@ -4,26 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<h1>Register page</h1>
-{% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{msg}}</div> 
-{% endfor %}
-    <form method="POST">
-        <form action="/register" method="post" class="form-contact">
-            <p><label for="last_name">Фамилия:</label><input type="text" name="last_name" value="" required></p>
-            <p><label for="first_name">Имя:</label><input type="text" name="first_name" value="" required></p>
-            <p><label for="patronymic">Отчество:</label><input type="text" name="patronymic" value="" required></p>
-            <p><label for="phone">Номер телефона:</label><input type="text" name="phone" value="" required></p>
-            <p><label for="psw">Пароль:</label><input type="password" name="psw" value="" required></p>
-            <p><label for="psw_again">Повторите пароль:</label><input type="password" name="psw_again" value="" required></p>
-            <p><input type="submit" value="Зарегистрироваться"></p>
-        </form>
-        <tr>
-            <td><a href="{{ url_for('auth.login') }}">Login</a></td>
-            <td><input type="submit" value="Register"></td>
-        </tr>
-    </form>
+    <div class="modern-content-page">
+        <div class="register-container">
+            <h1>Регистрация</h1>
+            {% for cat, msg in get_flashed_messages(True) %}
+            <div class="flash {{cat}}">{{msg}}</div> 
+            {% endfor %}
+            <form action="/register" method="post" class="register-form">
+                <div class="form-group">
+                    <label for="last_name">Фамилия:</label>
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="first_name">Имя:</label>
+                    <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="patronymic">Отчество:</label>
+                    <input type="text" id="patronymic" name="patronymic" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Номер телефона:</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="psw">Пароль:</label>
+                    <input type="password" id="psw" name="psw" required>
+                </div>
+                <div class="form-group">
+                    <label for="psw_again">Повторите пароль:</label>
+                    <input type="password" id="psw_again" name="psw_again" required>
+                </div>
+                <input type="submit" class="btn-primary" value="Зарегистрироваться">
+            </form>
+            <div class="form-footer">
+                <p>Уже есть аккаунт? <a href="{{ url_for('auth.login') }}" class="login-link">Войти</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

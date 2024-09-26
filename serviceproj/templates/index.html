@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
 
+{% extends 'base.html' %}
 
 {% block title %}
 
@@ -7,8 +7,38 @@
 
 {% block content %}
     {{ super() }}
-    <td><a href="{{ url_for('auth.register') }}">регистрация</a></td>
-    <td><a href="{{ url_for('auth.login') }}">авторизация</a></td>
-    <td><a href="{{ url_for('profile.profile') }}">профиль</a></td>
 
+    <section class="features">
+        <div class="container">
+            <div class="feature">
+                <h3>2 миллиарда китайцев работает на нас</h3>
+                <img src="{{url_for('static', filename='serv3.jpg')}}" />
+                <p>Худшее качество за максимальное время</p>
+            </div>
+            <div class="feature">
+                <h3>Мы не знаем что делаем</h3>
+                <img src="{{url_for('static', filename='serv1.jpg')}}" />
+                <p>Каждый работник по 5 раз разбирает и собирает технику а через 3 недели возвращает владельцу со словами это капитальная поломка идите купите новый</p>
+            </div>
+            <div class="feature">
+                <h3>Неквалифицированный персонал</h3>
+                <img src="{{url_for('static', filename='serv2.jpg')}}" />
+                <p>Бухой начальник нанял случайных алкашей в кабаке на место рабочих за 3 пузыря и забыл про них</p>
+            </div>
+        </div>
+
+        <h1><a href="{{ url_for('order.make_order') }}" class="btn"> Сделать заказ</a></h1>
+    </section>
+
+    <div class="img-block">
+        
+    </div>
+
+    <div class="img-block">
+        
+    </div>
+
+    <div class="img-block">
+        
+    </div>
 {% endblock %}
