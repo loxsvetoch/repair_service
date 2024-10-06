@@ -37,12 +37,15 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     service_id = db.Column(db.Integer, db.ForeignKey('services.id'))
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
+    device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))  # Новое поле device_id
     total_price = db.Column(db.Integer)
-    date = db.Column(db.Date)
 
     # Связь с заказанными услугами
     order_services = db.relationship('OrderServices', backref='order', lazy=True)
     used_components = db.relationship('UsedComponent', backref='order', lazy=True)
+    
+    # Связь с устройствами
+    #device = db.relationship('Device', backref='orders')  # Связь с моделью Device
 
 # Модель для заказанных услуг
 class OrderServices(db.Model):  
@@ -66,7 +69,7 @@ class WorkshopService(db.Model):
 
     # Связь с заказанными услугами
     orders = db.relationship('OrderServices', backref='workshop_service', lazy=True)
-    service_lists = db.relationship('ServiceList', backref='workshop_service', lazy=True)
+    service_lists = db.relationship('ServiceList', backref='workshop_service', cascade="all, delete-orphan")
 
 # Модель для услуг
 class Service(db.Model):
@@ -75,7 +78,6 @@ class Service(db.Model):
     street = db.Column(db.String(30))
     home_number = db.Column(db.Integer)
     box_index = db.Column(db.Integer)
-    specialization = db.Column(db.String(30))
 
     # Связь с заказами и сотрудниками
     orders = db.relationship('Order', backref='service', lazy=True)
@@ -98,12 +100,14 @@ class Device(db.Model):
     # Связь с компонентами
     components = db.relationship('Component', backref='device', lazy=True)
 
+    # Связь с заказами
+    #orders = db.relationship('Order', backref='device', lazy=True)  # Связь с моделью Order
+
 # Модель для компонентов 
 class Component(db.Model):
     __tablename__ = 'components'
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(50))
-    type = db.Column(db.String(30))
     device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))
     cost = db.Column(db.Integer)
 

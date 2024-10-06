@@ -53,8 +53,11 @@ def update_database():
     conn.close()
 
 
-
-
 #with app.app_context():
 #    update_database()  # Удаляем и создаем базу данных
 #    db.create_all()     # Создаем таблицы по моделям
+
+
+#from serviceproj.fill_database import fill_device_components
+#with app.app_context():
+#    fill_device_components()

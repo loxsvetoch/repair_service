@@ -70,7 +70,6 @@ def login():
 
     return render_template('login.html')
 
-
 @auth_bp.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():

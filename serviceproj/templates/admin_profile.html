@@ -19,9 +19,6 @@
     {% endfor %}
     
     <div class="profile-container">
-        {% for cat, msg in get_flashed_messages(True) %}
-        <div class="flash {{cat}}">{{msg}}</div> 
-        {% endfor %}
             <form action="{{ url_for('profile.admin_profile') }}" method="POST">
                 <h3>Добавить работника</h3>
 
@@ -54,14 +51,11 @@
             <h3>Добавить сервис</h3>
 
             <div>
-                <input type="text" name="stype" list="manage_type" placeholder="Добавить/Изменить или удалить сервис">
-                <datalist id="manage_type">
-                    {% for type in manage_type %}
-                    <option value="{{ type }}">
-                    {% endfor %}
+                <input type="text" name="stype" placeholder="Добавить/Изменить или удалить сервис">
+                <datalist>
+                    <option value="Добавить/обновить">
                 </datalist>
             </div>
-            <input type="text" name="service_specialization" placeholder="Специализация">
             <input type="text" name="service_index" placeholder="Индекс">
             <input type="text" name="service_address" placeholder="Адрес">
             <input type="text" name="service_number" placeholder="Номер дома">
@@ -88,7 +82,7 @@
             <input type="text" name="service_index_for_details" placeholder="выбрать сервис">
             <input type="text" name="service_description" placeholder="описание услуги">
             <input type="text" name="service_price" placeholder="Цена">
-            <input type="text" name="ws_id" placeholder="id (для удаления)">
+            <input type="text" name="ws_id" placeholder="id услуги (для удаления)">
 
             <input type="hidden" name="form_type" value="service_details_form">
             <button type="submit">Отправить</button>

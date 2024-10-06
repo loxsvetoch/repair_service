@@ -129,19 +129,76 @@ television_components = {
     'Дополнительные разъемы и порты': 1000
 }
 
+washing_machines = [
+    'Samsung EcoBubble WW80K5410WW 8kg',
+    'Samsung AddWash WW90K6414QW 9kg',
+    'Samsung QuickDrive WW90T986DSH 9kg',
+    'Samsung EcoBubble WW10T684DLH 10kg',
+    'Samsung AddWash WD80K5410OW 8kg',
+    'Samsung QuickDrive WD10T654DBH 10kg',
+    
+    'LG TurboWash F4V9RWP2E 10kg',
+    'LG AI DD F2V9HP2W 8kg',
+    'LG TwinWash FH4G1BCS2 12kg',
+    'LG TurboWash F4V5VYP2T 9kg',
+    'LG AI DD F2V5VYP3E 8.5kg',
+    'LG Direct Drive F2V3WY3WE 7kg',
+    
+    'Bosch Serie 6 WAT286H0GB 9kg',
+    'Bosch Serie 8 WAW325H0GB 9kg',
+    'Bosch HomeProfessional WAYH8790GB 9kg',
+    
+    'Siemens iQ700 WM14T790GB 9kg',
+    'Siemens iQ500 WM14UT93GB 9kg',
+    'Siemens iQ500 WM14U640GB 8kg',
+    
+    'Electrolux PerfectCare 800 EW8F8661BI 10kg',
+    'Electrolux PerfectCare 600 EW6F528S 8kg',
+    'Electrolux PerfectCare 700 EW7F4722LB 7kg',
+    'Electrolux UltraCare Eco EWF1486GDW 8kg'
+]
+
+washing_machine_components = {
+    'Барабан и корзина для белья': 7000,
+    'Мотор (инверторный двигатель)': 8000,
+    'Нагревательный элемент': 5000,
+    'Помпа для откачки воды': 3000,
+    'Электронный блок управления': 6000,
+    'Датчики загрузки и расхода воды': 2000,
+    'Амортизаторы и подвеска барабана': 4000,
+    'Уплотнители и прокладки': 1500,
+    'Фильтры (для воды и ворса)': 1000,
+    'Люк и защелка люка': 2500,
+    'Система дозирования моющих средств': 3000,
+    'Материал корпуса (нержавеющая сталь)': 5000,
+    'Звукоизоляция и виброизоляция': 2000,
+    'Шланги для подачи и слива воды': 1000,
+    'Система защиты от протечек': 3000
+}
+
 from serviceproj.models import Device, Component
 from serviceproj import db
 
 
 def populate_devices_and_components(devices_list, components_dict, device_type):
+
     for model in devices_list:
+        
         device = Device(title=model, type=device_type)
         db.session.add(device)
         db.session.commit()
 
         for component_name, component_cost in components_dict.items():
-            component = Component(label=component_name, type='Hardware', device_id=device.id, cost=component_cost)
+            component = Component(label=component_name, device_id=device.id, cost=component_cost)
             db.session.add(component)
+        
+        # Сохраняем все компоненты для данного устройства
         db.session.commit()
 
-# Заполнение данных для макбуков
+
+
+def fill_device_components():  
+    populate_devices_and_components(televisions, television_components, "телевизор")
+    populate_devices_and_components(macbooks, macbook_components, "ноутбук")
+    populate_devices_and_components(iphones, iphone_components, "смартфон")
+    populate_devices_and_components(washing_machines, washing_machine_components, "стиральная машина")

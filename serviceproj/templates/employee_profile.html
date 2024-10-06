@@ -1,0 +1,49 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <body>
+        <div >
+            <h1>Страница работника</h1>
+            <div>
+                Улица х
+            </div>
+    
+            <table >
+                <thead>
+                    <tr>
+                        <th>Название задачи</th>
+                        <th>Дата</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {# Здесь будет динамическая генерация строк таблицы #}
+                    {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.date }}</td>
+                        <td>
+                            <form action="{{ url_for('complete_task') }}" method="post">
+                                <input type="hidden" name="task_id" value="{{ task.id }}">
+                                <button type="submit">Выполнить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Нет задач</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+
+    
+{% endblock %}

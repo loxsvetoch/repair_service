@@ -5,11 +5,16 @@ from werkzeug.security import generate_password_hash
 
 from serviceproj import db
 from serviceproj.views.main import menu, admin_menu, employee_menu
-from serviceproj.models import Employee, Service, WorkshopService
+from serviceproj.models import Employee, Service, WorkshopService, ServiceList
 
 profile_bp = Blueprint('profile', __name__)
 
 manage_type = ['Добавить', 'Удалить']
+
+def get_orders_data():
+    #TODO получение orders из сервиса id сервиса получить из current_user service id
+    #Приведение к удобному json
+    pass
 
 @profile_bp.route('/profile', methods=["GET", "POST"])
 @login_required
@@ -57,8 +62,11 @@ def employee_profile():
     'last_name': user.last_name,
     'patronymic': user.patronymic
     }
-
-    return render_template("employee_profile.html", menu = menu)
+    #TODO получение tasks из списка orders current сервиса
+    tasks_data = [
+        {"id": 1, "name": "Ремонт макбука", "date": "2024-09-29"},
+    ]
+    return render_template("employee_profile.html", menu = menu, tasks=tasks_data)
 
 @profile_bp.route('/admin_profile',methods=["GET","POST"])
 @login_required
@@ -121,63 +129,72 @@ def admin_profile():
         elif form_type == 'service_form':
             #Получить тип действия (Добавить/удалить)
             todo = request.form.get("stype") 
-            service_address = request.form.get('service_address')
-            service_index = int(request.form.get('service_index'))
-            service_number = int(request.form.get("service_number"))
-            service_specialization = request.form.get("service_specialization")
-
-            service = Service.query.filter_by(service_index=service_index).first()
-
+            # Логика добавления/обновления сервиса
             if todo == manage_type[0]:
+                service_address = request.form.get('service_address')
+                service_index = int(request.form.get('service_index'))
+                service_number = int(request.form.get("service_number"))
+
+                service = Service.query.filter_by(box_index=service_index).first()
                 if not service:
                     #Добавить новый сервис
                     new_service = Service(
                         street = service_address,
                         home_number = service_number,
                         box_index = service_index,
-                        specialization = service_specialization
                     )
                     db.session.add(new_service)
                     db.session.commit()
-                    flash(f"Новый сервис {service_specialization} добавлен")
+                    flash(f"Новый сервис добавлен")
                 else:
                     #Обновить информацию о сервисе
                     db.session.query(Service.box_index == service_index).update(
                         street = service_address,
                         home_number = service_number,
                         box_index = service_index,
-                        specialization = service_specialization
                     )
 
-            elif todo == manage_type[1]:
-                # Логика удаления сервиса
-                Service.query.filter_by(box_index=service_index)
-                flash("Сервис уничтожен")
-
+        #Услуги
         elif form_type == 'service_details_form':
-            #Получить тип действия (Добавить/удалить)
-            #Услугу можно только добавить или удалить
             todo = request.form.get("stype") 
-            
-            service_idx = request.form.get("service_index_for_details") #!!!!!
-            workshop_service_name = request.form.get('service_name')
-
-            workshop_service_desc = request.form.get('service_description')
-            price = request.form.get('service_price')
-            ws_id = request.get(" ws_id")
             # Логика добавления или удаления услуги сервиса
             if todo == manage_type[0]:
+                
+                service_idx = request.form.get("service_index_for_details") #!!!!!
+
+                workshop_service_desc = request.form.get('service_description')
+                price = int(request.form.get('service_price'))
+                #получить id сервиса по почтовому индексу
+                service_id = Service.query.filter_by(box_index=service_idx).first().id
+
                 #добавление услуги
-                #TODO триггер на создание сопоставления в таблице service_list 
                 workshop_service = WorkshopService(
                     description=workshop_service_desc,
                     cost=price
                 )
                 db.session.add(workshop_service)
+                db.session.commit()
+                
+                #какая услуга у какого сервиса
+                serv_list = ServiceList(
+                    work_id=workshop_service.id,
+                    service_id=service_id
+                )
+                db.session.add(serv_list)
+                db.session.commit()
+
             elif todo == manage_type[1]:
-                #удаление услуги
-                WorkshopService.query.filter(WorkshopService.id==ws_id).delete()
-                flash("услуга удалена")
+                ws_id = request.form.get('ws_id')
+
+                workshop_service = WorkshopService.query.get(ws_id)
+                if workshop_service:
+                    ServiceList.query.filter_by(work_id=ws_id).delete()
+                    db.session.delete(workshop_service)
+                    
+                    db.session.commit()
+                    flash("Услуга удалена")
+                else:
+                    flash("Услуга не найдена")
 
     return render_template("admin_profile.html",
                             menu=admin_menu,

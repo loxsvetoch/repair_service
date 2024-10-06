@@ -14,20 +14,32 @@
             <div class="profile-container">
                 <form id="order-form" action="/submit_order" method="post">
                     <div class="form-group">
-                        <label for="device-model">Модель устройства:</label>
-                        <input type="text" id="device-model" name="deviceModel" list="deviceModels" placeholder="Введите модель устройства">
-                        <datalist id="deviceModels">
-                            {% for model in device_models %}
-                            <option value="{{ model }}">
+                        <label for="device-model">Выберите удобный сервис</label>
+                        <input type="text" id="service-address" name="serviceAddress" list="services" placeholder="Введите адрес">
+
+                        <datalist id="services">
+                            {% for service in services %}
+                            <option value="{{ service.street }} д.{{ service.home_number  }}">
                             {% endfor %}
                         </datalist>
                     </div>
+
+                    <div class="form-group">
+                        <label for="device-model">Модель устройства:</label>
+                        <input type="text" id="device-model" name="deviceModel" list="devices" placeholder="Введите модель устройства">
+                        <datalist id="devices">
+                            {% for model in devices %}
+                            <option value="{{ model.title }}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
+
                     <div class="form-group">
                         <label for="service-type">Тип услуги:</label>
-                        <input type="text" id="service-type" name="serviceType" list="serviceTypes" placeholder="Выберите тип услуги">
-                        <datalist id="serviceTypes">
-                            {% for service in service_types %}
-                            <option value="{{ service }}">
+                        <input type="text" id="service-type" name="serviceType" list="workshop_services" placeholder="Выберите тип услуги">
+                        <datalist id="workshop_services">
+                            {% for w_service in workshop_services %}
+                            <option value="{{ w_service.description }}">
                             {% endfor %}
                         </datalist>
                     </div>

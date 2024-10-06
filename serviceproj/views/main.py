@@ -33,7 +33,6 @@ admin_menu = [
     {'name': 'Авторизация', 'url': "auth.login"},
     {'name': 'Регистрация', 'url': "auth.register"},
     {'name': 'Профиль', 'url': "profile.profile"},
-    {'name': 'Сделать заказ', 'url': "order.make_order"}
 ]
 
 @main_bp.route('/')
