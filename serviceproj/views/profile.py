@@ -11,23 +11,18 @@ profile_bp = Blueprint('profile', __name__)
 
 manage_type = ['Добавить', 'Удалить']
 
-def get_orders_data():
-    #TODO получение orders из сервиса id сервиса получить из current_user service id
-    #Приведение к удобному json
-    pass
 
 @profile_bp.route('/profile', methods=["GET", "POST"])
 @login_required
 def profile():
     user = current_user
     role = Role.query.filter_by(id=user.role_id).first()
-
-    #TODO изменение получения роли через Role.role_name WHERE id=id
-    if role == 'employee':
+    
+    if role.role_name == 'employee':
         return redirect(url_for('profile.employee_profile'))
-    elif role == 'admin':
+    elif role.role_name == 'admin':
         return redirect(url_for('profile.admin_profile'))
-    elif role == 'client':
+    elif role.role_name == 'client':
         pass
     else:
         abort(403)
@@ -57,7 +52,8 @@ def profile():
 def employee_profile():
     user = current_user
     role = Role.query.filter_by(id=user.role_id).first()
-    if role != 'employee':
+    print(role.role_name)
+    if role.role_name != 'employee':
         abort(403)
 
     user_data = {
@@ -67,7 +63,7 @@ def employee_profile():
     }
     #TODO получение tasks из списка orders current сервиса
     tasks_data = [
-        {"id": 1, "name": "Ремонт макбука", "date": "2024-09-29"},
+        {"id": 1, "name": "Ремонт макбука", "date": "2024-09-29"}
     ]
     return render_template("employee_profile.html", menu = menu, tasks=tasks_data)
 
@@ -76,7 +72,7 @@ def employee_profile():
 def admin_profile(): 
     user = current_user
     role = Role.query.filter_by(id=user.role_id).first()
-    if role != 'admin':
+    if role.role_name != 'admin':
         abort(403)
 
     user_data = {
@@ -115,7 +111,7 @@ def admin_profile():
                         password = generate_password_hash(employee_password),
                         salary = employee_salary,
                         service_id = employee_service_id,
-                        role = role.id)
+                        role_id = role.id)
                     db.session.add(new_employee)
                     db.session.commit()
                     flash(f"Новый работник {employee_first_name} {employee_last_name} добавлен")

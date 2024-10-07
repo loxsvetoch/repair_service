@@ -1,5 +1,5 @@
 #serviceproj/views/auth.py
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -10,11 +10,17 @@ from serviceproj.models import Client, Employee, Role
 
 auth_bp = Blueprint('auth', __name__)
 
+
 @login_manager.user_loader
-def load_user(user_id):
-    user = Client.query.get(int(user_id))
+def load_user(phone_number):
+    phone_number = session["phone_number"]
+    user = Employee.query.filter_by(phone_number=phone_number).first()
     if user is None:
-        user = Employee.query.get(int(user_id))
+        user = Client.query.filter_by(phone_number=phone_number).first()
+    if user:
+        print(f"Найден пользователь: {user}")
+    else:
+        print("Пользователь не найден")
     return user
 
 login_manager.init_app(app)
@@ -50,6 +56,7 @@ def register():
             return redirect(url_for('auth.login'))
     return render_template('register.html')
 
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -65,6 +72,7 @@ def login():
                 
             if user and check_password_hash(user.password, password):
                 login_user(user)
+                session['phone_number'] = phone_number  # Сохраняем номер телефона
                 return redirect(url_for('profile.profile'))
             else:
                 flash('Логин или пароль некорректны')
@@ -72,6 +80,7 @@ def login():
             flash('Заполните все поля')
 
     return render_template('login.html')
+
 
 @auth_bp.route('/logout', methods=['GET', 'POST'])
 @login_required

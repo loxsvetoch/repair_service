@@ -14,7 +14,7 @@ def get_data():
 def close_order():
     user = current_user
     role = Role.query.filter_by(id=user.role_id).first()
-    if role != 'employee':
+    if role.role_name != 'employee':
         abort(403)
     
     

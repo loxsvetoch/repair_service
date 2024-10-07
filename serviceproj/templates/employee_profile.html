@@ -8,6 +8,7 @@
 {% block content %}
     {{ super() }}
     <body>
+        <a href="{{ url_for('auth.logout') }}">Выйти</a>
         <div >
             <h1>Страница работника</h1>
             <div>
@@ -29,7 +30,7 @@
                         <td>{{ task.name }}</td>
                         <td>{{ task.date }}</td>
                         <td>
-                            <form action="{{ url_for('complete_task') }}" method="post">
+                            <form action="" method="post">
                                 <input type="hidden" name="task_id" value="{{ task.id }}">
                                 <button type="submit">Выполнить</button>
                             </form>

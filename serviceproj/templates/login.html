@@ -8,7 +8,7 @@
 <body>
     <div class="modern-content-page">
         <div class="register-container">
-            <h1>Регистрация</h1>
+            <h1>Авторизация</h1>
             {% for cat, msg in get_flashed_messages(True) %}
             <div class="flash {{cat}}">{{msg}}</div> 
             {% endfor %}
@@ -21,14 +21,14 @@
 
                 <div class="form-group">
                     <label for="psw">Пароль:</label>
-                    <input type="password" id="psw" name="password" required>
+                    <input type="tel" id="psw" name="password" required>
                 </div>
 
                 <input type="submit" class="btn-primary" value="Войти">
             </form>
 
             <div class="form-footer">
-                <p>Еще нет аккаунта? <a href="{{ url_for('auth.register') }}" class="login-link">Войти</a></p>
+                <p>Еще нет аккаунта? <a href="{{ url_for('auth.register') }}" class="login-link">Регистрация</a></p>
             </div>
 
         </div>

@@ -12,6 +12,7 @@
     <footer>
         <div class="container">      
             профиЛЬ АДМИНА
+            <a href="{{ url_for('auth.logout') }}">Выйти</a>
         </div>
     </footer>
     {% for cat, msg in get_flashed_messages(True) %}

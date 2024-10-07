@@ -25,7 +25,7 @@ def get_data():
 def make_order():
     #TODO изменение получения роли
     role = Role.query.filter_by(id=current_user.role_id).first()
-    if role != "client":
+    if role.role_name != "client":
         abort(403)
 
     #TODO

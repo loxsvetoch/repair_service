@@ -57,6 +57,9 @@ def update_database():
 #    update_database()  # Удаляем и создаем базу данных
 #    db.create_all()     # Создаем таблицы по моделям
 
+#from serviceproj.adminuser import create_admin_user
+#with app.app_context():
+#    create_admin_user()
 
 #from serviceproj.fill_database import fill_device_components
 #with app.app_context():
