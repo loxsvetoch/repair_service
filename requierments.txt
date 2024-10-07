@@ -3,6 +3,7 @@ python-dotenv
 flask_login
 psycopg2
 flask-sqlalchemy
+flask_migrate
 SQLAlchemy
 click
 itsdangerous

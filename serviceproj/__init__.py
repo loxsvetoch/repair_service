@@ -27,12 +27,12 @@ app.register_blueprint(profile_bp)
 app.register_blueprint(order_bp)
 
 db.init_app(app)
-from serviceproj.models import Client, Employee, OrderServices, Order, ServiceList, Service, UsedComponent, WorkshopService, Device, Component
+from serviceproj.models import Client, Employee, Role, OrderServices, Order, ServiceList, Service,  WorkshopService, Device, ServiceDevice
 
 
 def update_database():
     db_name = "servicebase"
-    conn = psycopg2.connect(dbname="db_name", user="admin_user", password="admin_password", host="localhost")
+    conn = psycopg2.connect(dbname=db_name, user="admin_user", password="admin_password", host="localhost")
     conn.autocommit = True
     cursor = conn.cursor()
     

@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 
 from serviceproj import app, db, login_manager
-from serviceproj.models import Client, Employee
+from serviceproj.models import Client, Employee, Role
 
 
 auth_bp = Blueprint('auth', __name__)
@@ -22,6 +22,7 @@ login_manager.init_app(app)
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         patronymic = request.form.get('patronymic')
@@ -35,12 +36,14 @@ def register():
             flash('Введите одинаковые пароли')
         else:
             hash_pwd = generate_password_hash(psw)
+            role = Role.query.filter_by(role_name='client').first()
+
             new_user = Client(phone_number=phone[1:],
                             first_name=first_name,
                             last_name=last_name,
                             patronymic=patronymic,
                             password=hash_pwd,
-                            role="client"
+                            role=role.id
                             )   
             db.session.add(new_user)
             db.session.commit()
@@ -54,10 +57,10 @@ def login():
     if request.method == 'POST':
         phone_number = request.form.get('phone_number')[1:]
         password = request.form.get('password')
-        if phone_number and password:
+
+        if phone_number and password: 
             user = Client.query.filter_by(phone_number=phone_number).first()
             if not user:
-                print("Ищем в работниках")
                 user = Employee.query.filter_by(phone_number=phone_number).first()
                 
             if user and check_password_hash(user.password, password):

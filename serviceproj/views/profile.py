@@ -20,7 +20,7 @@ def get_orders_data():
 @login_required
 def profile():
     user = current_user
-    
+    #TODO изменение получения роли через Role.role_name WHERE id=id
     if user.role == 'employee':
         return redirect(url_for('profile.employee_profile'))
     elif user.role == 'admin':
@@ -71,6 +71,7 @@ def employee_profile():
 @profile_bp.route('/admin_profile',methods=["GET","POST"])
 @login_required
 def admin_profile(): 
+    #TODO изменение получения роли по g
     user = current_user
     if user.role != 'admin':
         abort(403)
