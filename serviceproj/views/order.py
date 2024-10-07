@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, abort, request, redirect, url_for
 from flask_login import login_required, current_user
 from serviceproj import db
 from serviceproj.views.main import menu
-from serviceproj.models import Device, Service, WorkshopService
+from serviceproj.models import Device, Service, WorkshopService, Role
 order_bp = Blueprint('order', __name__)
 
 
@@ -24,7 +24,8 @@ def get_data():
 @login_required
 def make_order():
     #TODO изменение получения роли
-    if current_user.role != "client":
+    role = Role.query.filter_by(id=current_user.role_id).first()
+    if role != "client":
         abort(403)
 
     #TODO

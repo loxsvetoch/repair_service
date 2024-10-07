@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash
 
 from serviceproj import db
 from serviceproj.views.main import menu, admin_menu, employee_menu
-from serviceproj.models import Employee, Service, WorkshopService, ServiceList
+from serviceproj.models import Employee, Service, WorkshopService, ServiceList, Role
 
 profile_bp = Blueprint('profile', __name__)
 
@@ -20,12 +20,14 @@ def get_orders_data():
 @login_required
 def profile():
     user = current_user
+    role = Role.query.filter_by(id=user.role_id).first()
+
     #TODO изменение получения роли через Role.role_name WHERE id=id
-    if user.role == 'employee':
+    if role == 'employee':
         return redirect(url_for('profile.employee_profile'))
-    elif user.role == 'admin':
+    elif role == 'admin':
         return redirect(url_for('profile.admin_profile'))
-    elif user.role == 'client':
+    elif role == 'client':
         pass
     else:
         abort(403)
@@ -54,7 +56,8 @@ def profile():
 @login_required
 def employee_profile():
     user = current_user
-    if user.role != 'employee':
+    role = Role.query.filter_by(id=user.role_id).first()
+    if role != 'employee':
         abort(403)
 
     user_data = {
@@ -71,15 +74,17 @@ def employee_profile():
 @profile_bp.route('/admin_profile',methods=["GET","POST"])
 @login_required
 def admin_profile(): 
-    #TODO изменение получения роли по g
     user = current_user
-    if user.role != 'admin':
+    role = Role.query.filter_by(id=user.role_id).first()
+    if role != 'admin':
         abort(403)
+
     user_data = {
     'first_name': user.first_name,
     'last_name': user.last_name,
     'patronymic': user.patronymic
     }
+
     if request.method == 'POST':
         form_type = request.form.get('form_type')
         if form_type == 'employee_form':
@@ -100,6 +105,9 @@ def admin_profile():
             if todo == manage_type[0]:
                 # Добавление/Изменение работника
                 if not employee:
+
+                    role = Role.query.filter_by(role_name='client').first()
+
                     new_employee = Employee(first_name = employee_first_name,
                         last_name =employee_last_name,
                         patronymic = employee_patronymic,
@@ -107,7 +115,7 @@ def admin_profile():
                         password = generate_password_hash(employee_password),
                         salary = employee_salary,
                         service_id = employee_service_id,
-                        role = "employee")
+                        role = role.id)
                     db.session.add(new_employee)
                     db.session.commit()
                     flash(f"Новый работник {employee_first_name} {employee_last_name} добавлен")
