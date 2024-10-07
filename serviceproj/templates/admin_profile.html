@@ -58,14 +58,13 @@
                 </datalist>
             </div>
             <input type="text" name="service_index" placeholder="Индекс">
+            <input type="text" name="service_spec" placeholder="Специализация">
             <input type="text" name="service_address" placeholder="Адрес">
             <input type="text" name="service_number" placeholder="Номер дома">
-            
             <input type="hidden" name="form_type" value="service_form">
             <button type="submit">Отправить</button>
         </form>
     </div>
-
 
     <div class="profile-container">
         <form action="{{ url_for('profile.admin_profile') }}" method="POST">
@@ -86,6 +85,19 @@
             <input type="text" name="ws_id" placeholder="id услуги (для удаления)">
 
             <input type="hidden" name="form_type" value="service_details_form">
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+    
+    <div class="profile-container">
+        <form action="{{ url_for('profile.admin_profile') }}" method="POST">
+            <h3>Добавить девайс</h3>
+
+            <input type="text" name="service_index_for_device" placeholder="выбрать сервис">
+            <input type="text" name="device_title" placeholder="название">
+            <input type="text" name="device_type" placeholder="тип">
+            <input type="hidden" name="form_type" value="device_form">
             <button type="submit">Отправить</button>
         </form>
     </div>

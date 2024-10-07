@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash
 
 from serviceproj import db
 from serviceproj.views.main import menu, admin_menu, employee_menu
-from serviceproj.models import Employee, Service, WorkshopService, ServiceList, Role
+from serviceproj.models import Employee, Service, WorkshopService, ServiceList, Role, Device, ServiceDevice
 
 profile_bp = Blueprint('profile', __name__)
 
@@ -17,7 +17,7 @@ manage_type = ['Добавить', 'Удалить']
 def profile():
     user = current_user
     role = Role.query.filter_by(id=user.role_id).first()
-    
+
     if role.role_name == 'employee':
         return redirect(url_for('profile.employee_profile'))
     elif role.role_name == 'admin':
@@ -139,6 +139,7 @@ def admin_profile():
                 service_address = request.form.get('service_address')
                 service_index = int(request.form.get('service_index'))
                 service_number = int(request.form.get("service_number"))
+                service_spec = request.form.get("service_spec")
 
                 service = Service.query.filter_by(box_index=service_index).first()
                 if not service:
@@ -147,6 +148,7 @@ def admin_profile():
                         street = service_address,
                         home_number = service_number,
                         box_index = service_index,
+                        specialization = service_spec
                     )
                     db.session.add(new_service)
                     db.session.commit()
@@ -157,6 +159,7 @@ def admin_profile():
                         street = service_address,
                         home_number = service_number,
                         box_index = service_index,
+                        specialization = service_spec
                     )
 
         #Услуги
@@ -200,6 +203,30 @@ def admin_profile():
                     flash("Услуга удалена")
                 else:
                     flash("Услуга не найдена")
+
+        elif form_type == 'device_form':
+            service_index_for_device = request.form.get("service_index_for_device")
+            device_title = request.form.get("device_title")
+            device_type = request.form.get("device_type")
+
+            device = Device(
+                title=device_title,
+                type=device_type
+            )
+
+            db.session.add(device)
+            db.session.commit()
+
+            service = service_id = Service.query.filter_by(box_index=service_index_for_device).first()
+
+            service_dev = ServiceDevice(
+                device_id = device.id,
+                service_id = service.id
+            )
+            db.session.add(service_dev)
+            db.session.commit()
+
+
 
     return render_template("admin_profile.html",
                             menu=admin_menu,

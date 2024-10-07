@@ -17,10 +17,6 @@ def load_user(phone_number):
     user = Employee.query.filter_by(phone_number=phone_number).first()
     if user is None:
         user = Client.query.filter_by(phone_number=phone_number).first()
-    if user:
-        print(f"Найден пользователь: {user}")
-    else:
-        print("Пользователь не найден")
     return user
 
 login_manager.init_app(app)

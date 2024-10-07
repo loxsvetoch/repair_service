@@ -9,9 +9,12 @@ order_bp = Blueprint('order', __name__)
 
 def get_data():
     # Query the Device and WorkshopService models
+    services = Service.query.all()
+
+    #TODO девайсы только нужного сервиса по DeviceServices, услуги только по service_list
     devices = Device.query.all()
     workshop_services = WorkshopService.query.all()
-    services = Service.query.all()
+    
 
     # Return the data as dictionaries or objects as needed
     return {
@@ -30,9 +33,12 @@ def make_order():
 
     #TODO
     # формируется заказ в таблице order 
-    # добавить поле или таблицу для хранения проблемы и выбранных пользователем девайсов(мкорее всегог добавитьб полей в orders)
+    # добавить поле для total cost(после выполнения заказа считает триггер, собирая цену всех услуг)
     # после этого формируеться запись в order_services => добавляется в ЛК employee соответствующего service
     # + добавить в OrderServices или в order поле status. так же добавить устройство из таблицы devices 
+
+    #TODO
+    # Вообще убрать тип услуги из оформления заказа. Услуги добавляет работник после выполнения, смотря ан проблему
     
 
     data=get_data()
