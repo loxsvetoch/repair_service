@@ -5,7 +5,7 @@ from flask_login import LoginManager
 import psycopg2
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'supersecret1111'
+app.config['SECRET_KEY'] = 'supersecret11111'
 app.config['name_db_connect'] = 'admin'
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin_user:admin_password@localhost/servicebase'
