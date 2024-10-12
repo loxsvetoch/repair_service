@@ -1,7 +1,7 @@
 #serviceproj\views\order.py
 from flask import Blueprint, render_template, abort, request, redirect, url_for
 from flask_login import login_required, current_user
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 import datetime
 
 from serviceproj import db
@@ -28,9 +28,15 @@ def get_data():
 
 
 def get_filtered_data(service_id):
-    
     devices = db.session.query(Device).join(ServiceDevice).filter(ServiceDevice.service_id == service_id).all()
-    workshop_services = db.session.query(WorkshopService).join(ServiceList).filter(ServiceList.service_id == service_id).all()
+
+    workshop_service_data = db.session.execute(text("SELECT * FROM get_workshop_services(:service_id)"), {'service_id': service_id}).fetchall()
+
+    # Преобразуем данные в объекты WorkshopService потому что лень переделывать свойства на индексы
+    workshop_services = [
+        WorkshopService(id=ws[0], description=ws[1], cost=ws[2])
+        for ws in workshop_service_data
+    ]
 
     return {
         "devices": devices,
@@ -90,4 +96,3 @@ def filter_data():
         'devices': [{'title': d.title} for d in filtered_data['devices']],
         'workshop_services': [{'description': ws.description} for ws in filtered_data['workshop_services']]
     }
-

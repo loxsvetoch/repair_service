@@ -7,7 +7,7 @@ import psycopg2
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecret11111'
 app.config['name_db_connect'] = 'admin'
-app.config['SQLALCHEMY_ECHO'] = True
+#app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin_user:admin_password@localhost/servicebase'
 
 login_manager = LoginManager()
@@ -19,12 +19,14 @@ from serviceproj.views.main import main_bp
 from serviceproj.views.auth import auth_bp
 from serviceproj.views.profile import profile_bp
 from serviceproj.views.order import order_bp
+from serviceproj.views.repair import repair_bp
 
 # регистрируем их
 app.register_blueprint(main_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(profile_bp)
 app.register_blueprint(order_bp)
+app.register_blueprint(repair_bp)
 
 db.init_app(app)
 from serviceproj.models import Client, Employee, Role, OrderServices, Order, ServiceList, Service,  WorkshopService, Device, ServiceDevice
