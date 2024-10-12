@@ -1,0 +1,20 @@
+<form id="order-form" action="/calc_order/" method="POST">
+    <h1>Страница завершения заказа</h1>
+    <div>Заказ {{ order.id }}: ремонт {{ order.device_id }}</div>
+    <div>Проблема: {{ order.problem }}</div>
+    
+    <h3>Оказанные услуги:</h3>
+    <div id="services">
+        <div class="service-item">
+            <label for="service-type-0">Тип услуги:</label>
+            <input type="text" id="service-type-0" name="services[]" list="workshop_services-0" placeholder="Выберите тип услуги">
+            <datalist id="workshop_services-0">
+                <!-- Здесь опции будут добавляться через JavaScript -->
+            </datalist>
+            <button type="button" class="remove-service">-</button>
+        </div>
+    </div>
+    <button type="button" id="add-service">Добавить услугу</button>
+    <input type="submit" value="Завершить заказ">
+    <script src="{{ url_for('static', filename='js/dynamic_close_order.js') }}"></script>
+</form>

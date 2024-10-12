@@ -61,7 +61,6 @@ class OrderServices(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
     work_id = db.Column(db.Integer, db.ForeignKey('workshop_services.id'), primary_key=True)
     status =db.Column(db.String(30), default="в очереди")
-    date = db.Column(db.Date)
 
 # Модель для списка услуг в мастерской
 class ServiceList(db.Model):

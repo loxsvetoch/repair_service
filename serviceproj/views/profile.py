@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash
 
 from serviceproj import db
 from serviceproj.views.main import menu, admin_menu, employee_menu
-from serviceproj.models import Employee, Service, WorkshopService, ServiceList, Role, Device, ServiceDevice
+from serviceproj.models import Employee, Service, WorkshopService, ServiceList, Role, Device, ServiceDevice, Order, OrderServices
 
 profile_bp = Blueprint('profile', __name__)
 
@@ -32,39 +32,41 @@ def profile():
         'last_name': user.last_name,
         'patronymic': user.patronymic
     }
-    
+
+
     if request.method == "POST":
-        # Здесь можно добавить обработку POST-запроса, если это необходимо
-        # Например, обновление данных пользователя или обработка формы
-        # Пример:
-        # new_data = request.form.get('some_field')
-        # user.some_field = new_data
-        # db.session.commit()
-
-        # После обработки POST-запроса можно выполнить перенаправление или другие действия
-
-        return redirect(url_for('profile.profile'))  # Пример перенаправления
+        return redirect(url_for('profile.profile'))
 
     return render_template('profile.html', user_data=user_data, menu = menu)
 
 @profile_bp.route('/employee_profile', methods=["GET","POST"])
 @login_required
 def employee_profile():
-    user = current_user
-    role = Role.query.filter_by(id=user.role_id).first()
-    print(role.role_name)
+    employee = current_user
+    role = Role.query.filter_by(id=employee.role_id).first()
+
     if role.role_name != 'employee':
         abort(403)
+    
+    data = Order.query.filter_by(service_id=employee.service_id).all()
 
-    user_data = {
-    'first_name': user.first_name,
-    'last_name': user.last_name,
-    'patronymic': user.patronymic
-    }
-    #TODO получение tasks из списка orders current сервиса
-    tasks_data = [
-        {"id": 1, "name": "Ремонт макбука", "date": "2024-09-29"}
-    ]
+    tasks_data = list()
+        
+    for order in data:
+        order_work = OrderServices.query.filter(Order.id==order.id).first()
+        if not order_work:
+            #Если заказов нету у этого сервиса:
+            return render_template("employee_profile.html", menu = menu, tasks=tasks_data)
+        if order_work.status == "Ожидание":
+            tasks_data.append(
+                {'id': order.id,
+                "name": order.problem,
+                "device": Device.query.filter_by(id=order.device_id).first().title,
+                "status": order_work.status,
+                "date": order.date
+                }
+            )
+    
     return render_template("employee_profile.html", menu = menu, tasks=tasks_data)
 
 @profile_bp.route('/admin_profile',methods=["GET","POST"])
@@ -74,12 +76,6 @@ def admin_profile():
     role = Role.query.filter_by(id=user.role_id).first()
     if role.role_name != 'admin':
         abort(403)
-
-    user_data = {
-    'first_name': user.first_name,
-    'last_name': user.last_name,
-    'patronymic': user.patronymic
-    }
 
     if request.method == 'POST':
         form_type = request.form.get('form_type')
@@ -101,8 +97,7 @@ def admin_profile():
             if todo == manage_type[0]:
                 # Добавление/Изменение работника
                 if not employee:
-
-                    role = Role.query.filter_by(role_name='client').first()
+                    role = Role.query.filter_by(role_name='employee').first()
 
                     new_employee = Employee(first_name = employee_first_name,
                         last_name =employee_last_name,

@@ -13,6 +13,9 @@ auth_bp = Blueprint('auth', __name__)
 
 @login_manager.user_loader
 def load_user(phone_number):
+    if not phone_number:
+        logout_user()
+        return render_template('login.html')
     phone_number = session["phone_number"]
     user = Employee.query.filter_by(phone_number=phone_number).first()
     if user is None:
