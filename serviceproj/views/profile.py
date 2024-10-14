@@ -33,11 +33,24 @@ def profile():
         'patronymic': user.patronymic
     }
 
+    data = Order.query.filter_by(client_id=user.id).all()
+
+    orders_data = list()
+    for order in data:
+        
+        orders_data.append(
+            {'id': order.id,
+            "name": order.problem,
+            "device": Device.query.filter_by(id=order.device_id).first().title,
+            "status": order.status,
+            "date": order.date
+            }
+        )
 
     if request.method == "POST":
         return redirect(url_for('profile.profile'))
 
-    return render_template('profile.html', user_data=user_data, menu = menu)
+    return render_template('profile.html', user_data=user_data, menu = menu,  orders=orders_data)
 
 @profile_bp.route('/employee_profile', methods=["GET","POST"])
 @login_required
@@ -53,16 +66,12 @@ def employee_profile():
     tasks_data = list()
         
     for order in data:
-        order_work = OrderServices.query.filter(Order.id==order.id).first()
-        if not order_work:
-            #Если заказов нету у этого сервиса:
-            return render_template("employee_profile.html", menu = menu, tasks=tasks_data)
-        if order_work.status == "Ожидание":
+        if order.status == "Ожидание":
             tasks_data.append(
                 {'id': order.id,
                 "name": order.problem,
                 "device": Device.query.filter_by(id=order.device_id).first().title,
-                "status": order_work.status,
+                "status": order.status,
                 "date": order.date
                 }
             )

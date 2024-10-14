@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import text
 from serviceproj import db
 from serviceproj.views.main import menu
-from serviceproj.models import Order, Service, Role, WorkshopService, ServiceList
+from serviceproj.models import Order, Service, Role, WorkshopService, ServiceList, OrderServices
 
 repair_bp = Blueprint('repair', __name__)
 
@@ -26,10 +26,7 @@ def close_order(task_id=None):
         # Получаем данные из запроса
         data = request.form.getlist('serviceType')  # Получаем список услуг
         print(data)
-
-
     return render_template("repair.html", menu=menu, order=order)
-
 
 
 @repair_bp.route("/filter_workshop_services/", methods=['POST'])
@@ -58,12 +55,26 @@ def calc_order(data=None):
     if role.role_name != 'employee':
         abort(403)
     data = request.get_json()  # Получаем данные из POST-запроса
-    services = data.get('services', [])  # Извлекаем массив услуг
+    services = data.get('services', [])
+    order_id = data.get('order_id', [])
 
-    print("Полученные услуги:", services)  # Проверяем, что получили
-    #TODO принять order_id и добавлять новый order_services для каждой услуги
-    #TODO Триггер для подсчета итогового заказа и изменения статуса на Выполено
-    #TODO Фильтр заказов по дате по статусу "В ожидании"
+    OrderServices.query.filter_by(order_id=order_id).delete()
+    for work in services:
+        work = " ".join(work.split(" ")[:-1])
+        print(work)
+        work_id = WorkshopService.query.filter(WorkshopService.description == work).first().id
+        new_order_service = OrderServices(
+            order_id=order_id,
+            work_id=work_id
+        )          
+        db.session.add(new_order_service)
+    db.session.commit()
+
+    db.session.query(Order).filter(Order.id == order_id).update(
+        {'status': 'Выполнено'}
+    )
+    db.session.commit()
+
     #TODO отображение выполненного заказа у клиента
     
     return redirect(url_for('profile.profile'))

@@ -50,7 +50,8 @@ class Order(db.Model):
     device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))  # Поле device_id
     total_price = db.Column(db.Integer)
     date = db.Column(db.Date)
-    problem = db.Column(db.String(255))  # Поле для описания проблемы
+    problem = db.Column(db.String(255))
+    status = db.Column(db.String(30), default="Ожидание")
 
     # Связь с заказанными услугами
     order_services = db.relationship('OrderServices', backref='order', lazy=True)
@@ -60,7 +61,6 @@ class OrderServices(db.Model):
     __tablename__ = 'order_services'
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
     work_id = db.Column(db.Integer, db.ForeignKey('workshop_services.id'), primary_key=True)
-    status =db.Column(db.String(30), default="в очереди")
 
 # Модель для списка услуг в мастерской
 class ServiceList(db.Model):

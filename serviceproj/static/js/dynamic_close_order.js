@@ -32,19 +32,24 @@ let serviceIndex = 1; // Уникальный индекс для новых у�
 
     document.getElementById('order-form').addEventListener('submit', function(event) {
         event.preventDefault();
-
+    
         const formData = new FormData(this);
         const servicesArray = formData.getAll('services[]'); // Получаем массив услуг
-
+    
+        // Извлекаем task_id (или order_id) из URL
+        const url = window.location.href;
+        const taskId = url.split('/').pop(); // Получаем последний элемент из URL
+    
         console.log("Услуги, которые будут отправлены:", servicesArray);
-
+        console.log("Order ID (Task ID):", taskId);
+    
         // Отправляем данные на сервер
         fetch('/calc_order/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ services: servicesArray }), // Отправляем массив услуг
+            body: JSON.stringify({ services: servicesArray, order_id: taskId }), // Отправляем услуги и ордер id
         })
         .then(response => {
             if (response.ok) {
