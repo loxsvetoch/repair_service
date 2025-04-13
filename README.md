@@ -23,10 +23,10 @@
 - **Контейнеризация:** Docker
 - 
 ## Структура базы данных
-# UML-диаграмма предметной области
+### UML-диаграмма предметной области
 ![a drawio](https://github.com/user-attachments/assets/5f141c57-0b1d-411f-8ed2-9861b3104e65)
 
-# Схема БД
+### Схема БД
 ![scheme](https://github.com/user-attachments/assets/a433829e-666a-492f-858a-916a7f2bd0b4)
 
 ## Структура проекта
