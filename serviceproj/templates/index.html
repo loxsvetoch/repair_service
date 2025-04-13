@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+
+    <section class="features">
+        <div class="container">
+            <div class="feature">
+                <h3>Более 100 мастеров в штате</h3>
+                <img src="{{url_for('static', filename='serv3.jpg')}}" />
+                <p>лучшее качество за минимальное время</p>
+            </div>
+            <div class="feature">
+                <h3>Мы знаем что делаем</h3>
+                <img src="{{url_for('static', filename='serv1.jpg')}}" />
+                <p>Каждый работник имеет сертификат о квалификации</p>
+            </div>
+            <div class="feature">
+                <h3>Квалифицированный персонал</h3>
+                <img src="{{url_for('static', filename='serv2.jpg')}}" />
+                <p>Лучший ремонт на рынке</p>
+            </div>
+        </div>
+
+        <h1><a href="{{ url_for('order.make_order') }}" class="btn"> Сделать заказ</a></h1>
+    </section>
+
+    <div class="img-block">
+        
+    </div>
+
+    <div class="img-block">
+        
+    </div>
+
+    <div class="img-block">
+        
+    </div>
+{% endblock %}

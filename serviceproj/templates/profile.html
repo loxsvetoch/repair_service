@@ -1,0 +1,61 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Личный кабинет</title>
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <body>
+        <div class="profile-container">
+            <header>
+                <div>
+                    <h2>Личный кабинет</h2>
+                </div>
+                <div class="user-info">
+                    {% block user_data %}
+                    {%if user_data%}
+        
+                    <h2> {{ user_data['first_name'] }} {{ user_data['last_name'] }} {{ user_data['patronymic'] }}</h2>
+                    {% endif %}
+                    {%endblock%}
+                    <a href="{{ url_for('auth.logout') }}">Выйти</a>
+                </div> 
+            </header>
+            <main>
+                    <section class="orders">
+                        <h2>Заказы</h2>
+                        <table id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Проблема</th>
+                                    <th>Дата</th>
+                                    <th>Девайс</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.name }}</td>
+                                    <td>{{ order.date }}</td>
+                                    <td>{{ order.device }}</td>
+                                    <td>{{ order.status }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">Нет заказов</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </section>
+                <button id="new-order-btn" >
+                    <a href="{{ url_for('order.make_order') }}">Оформить новый заказ</a>
+                </button>
+            </main>
+            <script src="script.js"></script>
+        </div>
+    </body>
+{% endblock %}
