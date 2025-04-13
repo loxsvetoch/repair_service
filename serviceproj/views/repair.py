@@ -36,16 +36,12 @@ def filter_workshop_services():
     role = Role.query.filter_by(id=user.role_id).first()
     if role.role_name != 'employee':
         abort(403)
-
     workshop_service_data = db.session.execute(text("SELECT * FROM get_workshop_services(:service_id)"), {'service_id': current_user.service_id}).fetchall()
-
-
     workshop_services = [
-        {"description": ws[1], "cost": ws[2]}  # Убедитесь, что индексы правильные
+        {"description": ws[1], "cost": ws[2]} 
         for ws in workshop_service_data
     ]
     return jsonify(workshop_services)
-
 
 @repair_bp.route("/calc_order/", methods=['GET', 'POST'])
 @login_required

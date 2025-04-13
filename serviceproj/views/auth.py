@@ -1,12 +1,9 @@
-#serviceproj/views/auth.py
+# serviceproj/views/auth.py
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
-
-
 from serviceproj import app, db, login_manager
 from serviceproj.models import Client, Employee, Role
-
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -22,7 +19,9 @@ def load_user(phone_number):
         user = Client.query.filter_by(phone_number=phone_number).first()
     return user
 
+
 login_manager.init_app(app)
+
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -44,12 +43,12 @@ def register():
             role = Role.query.filter_by(role_name='client').first()
 
             new_user = Client(phone_number=phone[1:],
-                            first_name=first_name,
-                            last_name=last_name,
-                            patronymic=patronymic,
-                            password=hash_pwd,
-                            role=role.id
-                            )   
+                              first_name=first_name,
+                              last_name=last_name,
+                              patronymic=patronymic,
+                              password=hash_pwd,
+                              role=role
+                              )
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('auth.login'))
@@ -63,15 +62,16 @@ def login():
     if request.method == 'POST':
         phone_number = request.form.get('phone_number')[1:]
         password = request.form.get('password')
-
-        if phone_number and password: 
+        if phone_number and password:
             user = Client.query.filter_by(phone_number=phone_number).first()
             if not user:
-                user = Employee.query.filter_by(phone_number=phone_number).first()
-                
+                user = Employee.query.filter_by(
+                    phone_number=phone_number).first()
+
             if user and check_password_hash(user.password, password):
                 login_user(user)
-                session['phone_number'] = phone_number  # Сохраняем номер телефона
+                # Сохраняем номер телефона
+                session['phone_number'] = phone_number
                 return redirect(url_for('profile.profile'))
             else:
                 flash('Логин или пароль некорректны')
@@ -86,6 +86,7 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
 
 @auth_bp.app_errorhandler(401)
 def handle_401(e):

@@ -11,7 +11,7 @@
 <body>
     <footer>
         <div class="container">      
-            профиЛЬ АДМИНА
+            Admin profile
             <a href="{{ url_for('auth.logout') }}">Выйти</a>
         </div>
     </footer>
@@ -101,6 +101,14 @@
             <button type="submit">Отправить</button>
         </form>
     </div>
+
+    <div class="profile-container" >
+        <form action="{{ url_for('backup.admin_backup') }}" >
+            <button type="submit">Управление откатами </button>
+        </form>
+        
+    </div>
+    
 </body>
 
 {% endblock %}

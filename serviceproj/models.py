@@ -101,3 +101,11 @@ class ServiceDevice(db.Model):
     __tablename__ = 'service_device'
     device_id = db.Column(db.Integer, db.ForeignKey('devices.id'), primary_key=True)
     service_id = db.Column(db.Integer, db.ForeignKey('services.id'), primary_key=True)
+
+
+class Savepoint(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+
+    def __repr__(self):
+        return f"<Savepoint {self.name}>"

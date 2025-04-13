@@ -1,3 +1,15 @@
 {
-    "python.REPL.enableREPLSmartSend": false
+    "python.REPL.enableREPLSmartSend": false,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "servicebase",
+            "name": "conn1",
+            "username": "postgres",
+            "password": "1"
+        }
+    ]
 }

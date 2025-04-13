@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Управление сейвпоинтами</h1>
+
+  <h1>Сейвпоинты</h1>
+  <head>
+    <meta charset="UTF-8">
+    <title>Savepoints</title>
+</head>
+
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flashes">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+  <div class="profile-container">
+      <h1>Бекапы</h1>
+
+      <form action="{{ url_for('backup.create_backup') }}" method="post" style="margin-bottom: 20px;">
+          <button type="submit">Создать бекап</button>
+      </form>
+
+      <table>
+          <tbody>
+              {% for path in pathes %}
+              <tr>
+                  <td>{{ path }}</td>
+                  <td>
+                      <div class="actions">
+                          <form action="{{ url_for('backup.delete_backup', path=path) }}" method="post" style="margin: 0;">
+                              <input type="hidden" name="path" value="{{ path }}">
+                              <button type="submit">Удалить</button>
+                          </form>
+                          <form action="{{ url_for('backup.restore_backup', path=path) }}" method="post" style="margin: 0;">
+                              <input type="hidden" name="path" value="{{ path }}">
+                              <button type="submit">Откатиться</button>
+                          </form>
+                      </div>
+                  </td>
+              </tr>
+              {% else %}
+              <tr>
+                  <td colspan="2" style="text-align: center;">Нет задач</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+
+  </div>
+</body>
+
+  
+{% endblock %}
