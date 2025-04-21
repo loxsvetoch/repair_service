@@ -103,6 +103,16 @@ END;
 $function$
 ;
 
+CREATE OR REPLACE FUNCTION public.restore_dump(dump_path text)
+  RETURNS void
+  LANGUAGE plsh
+AS $function$
+#!/bin/bash
+sudo -u postgres pg_restore -Fc -U postgres -d servicebase -c "$1"
+$function$
+;
+
+
 логирование 
 CREATE OR REPLACE FUNCTION public.log_trigger_operation()
  RETURNS trigger
